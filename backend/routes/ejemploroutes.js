@@ -14,7 +14,7 @@ ejemplo.get('/:id',controller.getEjemploID);
 ejemplo.put('/:id',controller.updateEjemplo);
 
 // POST
-ejemplo.post('/',controller.postEjemplo);
+ejemplo.post('/phjju',controller.postEjemplo);
 
 // DELETE con parámetro de ID
 ejemplo.delete('/:id',controller.deleteEjemplo);

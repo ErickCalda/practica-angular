@@ -19,7 +19,11 @@ const ejemploShemas= mongoose.Schema({
         type:[String],
         required:false
     }
+
 })
+
+
+
 
 const Ejemplo = mongoose.model('Ejemplo',ejemploShemas)
 
