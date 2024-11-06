@@ -1,0 +1,11 @@
+{
+  "routes": [
+    "/home",
+    "/mi_perfil",
+    "/mi_perfil/user",
+    "/productos",
+    "/productos/chat_de_compra_venta",
+    "/servicio",
+    "/vender"
+  ]
+}
