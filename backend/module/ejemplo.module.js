@@ -1,7 +1,7 @@
 
 import mongoose from "mongoose";
 
-const ejemploShemas= mongoose.Schema({
+const personaShemas= mongoose.Schema({
     nombre:{
         type:String,
         required:true
@@ -19,13 +19,9 @@ const ejemploShemas= mongoose.Schema({
         type:[String],
         required:false
     }
-
 })
 
+const Persona = mongoose.model('Persona',personaShemas)
 
 
-
-const Ejemplo = mongoose.model('Ejemplo',ejemploShemas)
-
-
-export default Ejemplo
+export default Persona
