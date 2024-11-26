@@ -11,7 +11,7 @@ export class Server{
 
         this.app = express();
         this.port= process.env.PORTS || 3000
-        this.rutaGeneral = '/api/v1/'
+        this.rutaGeneral = '/api/'
 
         this.mongodbConexion();
         this.midleware();
