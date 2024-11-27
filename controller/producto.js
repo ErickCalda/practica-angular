@@ -53,27 +53,27 @@ export class Controller {
         }
     }
 
-    // Crear un nuevo producto
     postProducto = async (req, res) => {
-        const body = req.body;
-        const producto = new Producto(body);
-
         try {
+            // Si se sube una imagen, añade su ruta al cuerpo
+            if (req.file) {
+                req.body.imagen = req.file.path; // Ruta de la imagen subida
+            }
+    
+            const producto = new Producto(req.body);
             const validaError = producto.validateSync();
-
+    
             if (validaError) {
                 const errorMensaje = Object.values(validaError.errors).map(errors => errors.message);
-
-                return res.status(400).json({
-                    error: errorMensaje
-                });
+                return res.status(400).json({ error: errorMensaje });
             }
-
+    
             await producto.save();
             return res.status(200).json({
+              
                 producto
             });
-
+    
         } catch (error) {
             console.log(error);
             return res.status(500).json({
@@ -81,7 +81,7 @@ export class Controller {
             });
         }
     }
-
+    
     // Actualizar producto por ID
     updateProducto = async (req, res) => {
         console.log('Actualizar producto');
@@ -148,4 +148,56 @@ export class Controller {
         }
     }
 
-} // Fin de la clase
+
+
+
+    // Método para buscar productos por nombre, precio o rango de precios
+    buscarProductos = async (req, res) => {
+        console.log('Busqueda de productos');
+
+        try {
+            // Obtener los parámetros de búsqueda de la query string
+            const { nombre, precio, minPrecio, maxPrecio } = req.query;
+
+            // Crear un objeto de filtros para la consulta
+            let filtros = {};
+
+            // Si se proporciona un nombre, filtramos por él
+            if (nombre) {
+                filtros.nombre = { $regex: nombre, $options: 'i' }; // Búsqueda insensible a mayúsculas
+            }
+
+            // Si se proporciona un precio exacto, lo filtramos
+            if (precio) {
+                filtros.precio = precio;
+            }
+
+            // Si se proporcionan minPrecio y maxPrecio, filtramos por el rango de precios
+            if (minPrecio && maxPrecio) {
+                filtros.precio = { $gte: minPrecio, $lte: maxPrecio };
+            }
+
+            // Buscar productos en la base de datos según los filtros
+            const productos = await Producto.find(filtros, { __v: 0 });
+
+            // Si no se encuentran productos, retornamos un mensaje
+            if (productos.length === 0) {
+                return res.status(400).json({
+                    msg: 'No se encontraron productos que coincidan con la búsqueda'
+                });
+            }
+
+            // Retornar los productos encontrados
+            return res.status(200).json(productos);
+            
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                msg: 'Error al buscar productos',
+                error
+            });
+        }
+    };
+
+} 
+
